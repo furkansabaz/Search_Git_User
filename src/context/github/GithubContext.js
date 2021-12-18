@@ -1,28 +1,61 @@
-import { createContext,useState } from "react"
-
+import { createContext,useReducer } from "react"
+import githubReducer from "./GithubReducer"
 const GithubContext = createContext();
 
-const GITHUB_URL = process.env.REACT_APP_GITHUB_URL
-const GITHUB_TOKEN = process.env.REACT_APP_GITHUB_TOKEN
 
 export const GithubProvider = ({children})=> {
-  const [users,setUsers] = useState([])
-  const [loading,setLoading] = useState(true)
-  const fetchUsers = async ()=>{
-      const response = await fetch(`${GITHUB_URL}/users`,{
-        headers:{
-          Authorization: `token ${GITHUB_TOKEN}`,
-        }
-      })
-      const data = await response.json()
-      setLoading(false)
-      setUsers(data)
+  
+  const initialState = {
+    users: [],
+    repos: [],
+    user: {},
+    loading: false
   }
+  const [state,dispatch] = useReducer(githubReducer, initialState)
+
+  // //Get search users result 
+  // const searchUsers = async (text)=>{
+  //     setLoading() //dispatch içinde sET_LOADING i çağırır ve LOADING değeri true yapılır
+  //     const params = new URLSearchParams({q: text})//yeni bir parametre oluşturuyoruz. Query String
+  //     const response = await fetch(`${GITHUB_URL}/search/users?${params}`,{
+  //       headers:{
+  //         Authorization: `token ${GITHUB_TOKEN}`,
+  //       }
+  //     })
+  //     const {items} = await response.json() // gelen verinin içinden items verisini çekiyoruz
+  //     //dispatch metoduna action parametresini gönderiyoruz.
+  //     //Bu şekilde GithubRecuer metodu çalışacak
+  //     dispatch({
+  //       type: 'GET_USERS', //loading false yapılır ve state içine users parametresi eklenir.
+  //       payload: items,
+  //     })
+  // }
+
+
+   //Get single user by login 
+  // const getUser = async (login)=>{
+  //     setLoading() //dispatch içinde sET_LOADING i çağırır ve LOADING değeri true yapılır
+  //     const response = await fetch(`${GITHUB_URL}/users/${login}`,{
+  //       headers:{
+  //         Authorization: `token ${GITHUB_TOKEN}`,
+  //       }
+  //     })
+  //     if(response.status === 404){
+  //       window.location = '/notfound'
+  //     } else {
+  //     const data = await response.json() // gelen verinin içinden items verisini çekiyoruz
+  //     //dispatch metoduna action parametresini gönderiyoruz.
+  //     //Bu şekilde GithubRecuer metodu çalışacak
+  //     dispatch({
+  //       type: 'GET_USER', //loading false yapılır ve state içine users parametresi eklenir.
+  //       payload: data,
+  //     })
+  //     }
+  // }
 
   return <GithubContext.Provider value={{ 
-  users,
-  loading,
-  fetchUsers
+  ...state,
+  dispatch,
   }}>
   {children}
 </GithubContext.Provider>
