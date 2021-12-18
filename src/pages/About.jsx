@@ -10,12 +10,12 @@ function About() {
         </strong>
         .
       </p>
-      <p className='text-lg text-gray-400'>
-        Version <span className='text-white'>1.0.0</span>
+      <p className='text-lg text-gray-400 '>
+        Version <span className='text-indigo-700'>1.0.0</span>
       </p>
       <p className='text-lg text-gray-400'>
         Layout By:
-        <a className='text-white' href='www.furkansabaz.com'>
+        <a className='text-indigo-700' href='www.furkansabaz.com'>
           Furkan Sabaz
         </a>
       </p>
